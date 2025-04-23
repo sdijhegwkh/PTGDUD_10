@@ -15,10 +15,9 @@ const StudentList = () => {
   const [editClass, setEditClass] = useState("");
   const [editAge, setEditAge] = useState("");
 
-  const handleDelete = (id) => {
-    setStudents((prev) => prev.filter((s) => s.id !== id));
-  };
+  const [search, setSearch] = useState(""); // State cho tìm kiếm
 
+  // Xử lý thêm sinh viên
   const handleAdd = () => {
     if (!name.trim() || !className.trim() || !age.trim()) {
       alert("Vui lòng nhập đầy đủ thông tin.");
@@ -38,6 +37,12 @@ const StudentList = () => {
     setAge("");
   };
 
+  // Xử lý xoá sinh viên
+  const handleDelete = (id) => {
+    setStudents((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  // Xử lý sửa sinh viên
   const handleEdit = (student) => {
     setEditId(student.id);
     setEditName(student.name);
@@ -59,6 +64,11 @@ const StudentList = () => {
   const handleCancel = () => {
     setEditId(null);
   };
+
+  // Lọc danh sách sinh viên theo tên (không phân biệt hoa/thường)
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-lg w-full max-w-3xl">
@@ -95,6 +105,17 @@ const StudentList = () => {
         </button>
       </div>
 
+      {/* Input tìm kiếm */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Tìm sinh viên theo tên..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border px-4 py-2 rounded w-full md:w-1/2"
+        />
+      </div>
+
       {/* Bảng danh sách */}
       <table className="min-w-full border border-gray-300">
         <thead>
@@ -106,71 +127,72 @@ const StudentList = () => {
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
-            <tr key={student.id} className="text-center">
-              {editId === student.id ? (
-                <>
-                  <td className="py-2 px-2 border">
-                    <input
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      className="border px-2 py-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="py-2 px-2 border">
-                    <input
-                      value={editClass}
-                      onChange={(e) => setEditClass(e.target.value)}
-                      className="border px-2 py-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="py-2 px-2 border">
-                    <input
-                      type="number"
-                      value={editAge}
-                      onChange={(e) => setEditAge(e.target.value)}
-                      className="border px-2 py-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="py-2 px-2 border space-x-2">
-                    <button
-                      onClick={handleSave}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      Lưu
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
-                    >
-                      Huỷ
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="py-2 px-4 border">{student.name}</td>
-                  <td className="py-2 px-4 border">{student.class}</td>
-                  <td className="py-2 px-4 border">{student.age}</td>
-                  <td className="py-2 px-4 border space-x-2">
-                    <button
-                      onClick={() => handleEdit(student)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Xoá
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
-          {students.length === 0 && (
+          {filteredStudents.length > 0 ? (
+            filteredStudents.map((student) => (
+              <tr key={student.id} className="text-center">
+                {editId === student.id ? (
+                  <>
+                    <td className="py-2 px-2 border">
+                      <input
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-2 border">
+                      <input
+                        value={editClass}
+                        onChange={(e) => setEditClass(e.target.value)}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-2 border">
+                      <input
+                        type="number"
+                        value={editAge}
+                        onChange={(e) => setEditAge(e.target.value)}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-2 border space-x-2">
+                      <button
+                        onClick={handleSave}
+                        className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                      >
+                        Lưu
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                      >
+                        Huỷ
+                      </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td className="py-2 px-4 border">{student.name}</td>
+                    <td className="py-2 px-4 border">{student.class}</td>
+                    <td className="py-2 px-4 border">{student.age}</td>
+                    <td className="py-2 px-4 border space-x-2">
+                      <button
+                        onClick={() => handleEdit(student)}
+                        className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        onClick={() => handleDelete(student.id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      >
+                        Xoá
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))
+          ) : (
             <tr>
               <td colSpan="4" className="py-4 text-center text-gray-500">
                 Không có sinh viên nào.
