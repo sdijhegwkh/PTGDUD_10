@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const StudentList = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: "Nguyễn Văn A", class: "12A1", age: 18 },
-    { id: 2, name: "Trần Thị B", class: "11B2", age: 17 },
-    { id: 3, name: "Lê Thị C", class: "12A1", age: 19 },
-    { id: 4, name: "Phan Văn D", class: "11B2", age: 16 },
-  ]);
+  // Lấy danh sách sinh viên từ localStorage khi trang load
+  const loadStudentsFromLocalStorage = () => {
+    const savedStudents = localStorage.getItem("students");
+    return savedStudents ? JSON.parse(savedStudents) : [];
+  };
+
+  // Khởi tạo state sinh viên từ localStorage
+  const [students, setStudents] = useState(loadStudentsFromLocalStorage);
 
   const [name, setName] = useState("");
   const [className, setClassName] = useState("");
@@ -19,6 +21,11 @@ const StudentList = () => {
 
   const [search, setSearch] = useState(""); // State cho tìm kiếm
   const [selectedClass, setSelectedClass] = useState(""); // State cho lớp đã chọn
+
+  // Lưu danh sách sinh viên vào localStorage mỗi khi danh sách thay đổi
+  useEffect(() => {
+    localStorage.setItem("students", JSON.stringify(students));
+  }, [students]);
 
   // Xử lý thêm sinh viên
   const handleAdd = () => {
