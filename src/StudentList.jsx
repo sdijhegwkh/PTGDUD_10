@@ -75,7 +75,7 @@ const StudentList = () => {
             <th className="py-2 px-4 border">Tên</th>
             <th className="py-2 px-4 border">Lớp</th>
             <th className="py-2 px-4 border">Tuổi</th>
-            <th className="py-2 px-4 border">Hành động</th>
+            <th className="py-2 px-4 border">ID</th>
           </tr>
         </thead>
         <tbody>
