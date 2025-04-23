@@ -1,6 +1,6 @@
 import React from "react";
 import StudentList from "./StudentList";
-// import "./App.css";
+import "./App.css";
 
 
 function App() {
