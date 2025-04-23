@@ -4,6 +4,8 @@ const StudentList = () => {
   const [students, setStudents] = useState([
     { id: 1, name: "Nguyễn Văn A", class: "12A1", age: 18 },
     { id: 2, name: "Trần Thị B", class: "11B2", age: 17 },
+    { id: 3, name: "Lê Thị C", class: "12A1", age: 19 },
+    { id: 4, name: "Phan Văn D", class: "11B2", age: 16 },
   ]);
 
   const [name, setName] = useState("");
@@ -16,6 +18,7 @@ const StudentList = () => {
   const [editAge, setEditAge] = useState("");
 
   const [search, setSearch] = useState(""); // State cho tìm kiếm
+  const [selectedClass, setSelectedClass] = useState(""); // State cho lớp đã chọn
 
   // Xử lý thêm sinh viên
   const handleAdd = () => {
@@ -66,9 +69,16 @@ const StudentList = () => {
   };
 
   // Lọc danh sách sinh viên theo tên (không phân biệt hoa/thường)
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredStudents = students
+    .filter((student) =>
+      student.name.toLowerCase().includes(search.toLowerCase())
+    )
+    .filter((student) =>
+      selectedClass ? student.class === selectedClass : true
+    ); // Lọc theo lớp
+
+  // Lấy danh sách lớp
+  const classList = [...new Set(students.map((student) => student.class))];
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-lg w-full max-w-3xl">
@@ -114,6 +124,22 @@ const StudentList = () => {
           onChange={(e) => setSearch(e.target.value)}
           className="border px-4 py-2 rounded w-full md:w-1/2"
         />
+      </div>
+
+      {/* Dropdown chọn lớp */}
+      <div className="mb-4">
+        <select
+          value={selectedClass}
+          onChange={(e) => setSelectedClass(e.target.value)}
+          className="border px-4 py-2 rounded w-full md:w-1/3"
+        >
+          <option value="">Tất cả lớp</option>
+          {classList.map((cls, index) => (
+            <option key={index} value={cls}>
+              {cls}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Bảng danh sách */}
